@@ -7,23 +7,21 @@ export class EmployeeForm extends React.Component {
       submitting: false,
       error: false,
       success: false,
-      employee: {
-        name: '',
-        email: '',
-      },
     };
   }
 
   render() {
     return (
-      <form>
+      <form onSubmit={this.props.onSubmit}>
         <div className="form-group">
-          <label htmlFor="exampleInputEmail1">Employee name</label>
-          <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+          <label htmlFor="exampleInputName">Employee name</label>
+          <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="name"
+                 value={this.props.formValues.name} onChange={this.props.handleInputChange} />
         </div>
         <div className="form-group">
-          <label htmlFor="exampleInputPassword1">Employee Email</label>
-          <input type="email" className="form-control" id="exampleInputPassword1"/>
+          <label htmlFor="exampleInputEmail1">Employee Email</label>
+          <input type="email" className="form-control" id="exampleInputPassword1" name="email"
+                 value={this.props.formValues.email} onChange={this.props.handleInputChange} />
         </div>
         <button type="submit" className="btn btn-success">Add Employee</button>
       </form>

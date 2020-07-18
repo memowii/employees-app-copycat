@@ -10,16 +10,39 @@ class App extends React.Component {
     super(props);
     this.state = {
       employees: [],
+      form: {
+        name: '',
+        email: '',
+      },
     };
     this.api = new API();
   }
 
   componentDidMount() {
-    this.api.getEmployees().then(employees => this.setState({employees: employees}));
+    this.api.getEmployees().then(employees => this.setState({employees}));
   }
 
+  handleInputChange = event => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [event.target.name]: event.target.value,
+      },
+    });
+  };
+
+  handleSubmit = async event => {
+    event.preventDefault();
+
+    try {
+      const response = await this.api.addEmployee(this.state.form);
+      if (response) this.setState({employees: [...this.state.employees, response]});
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   render() {
-    console.log('from render ', this.employees);
     return (
       <>
         <div className="container">
@@ -31,8 +54,9 @@ class App extends React.Component {
 
               <main>
                 <article>
-                  <EmployeeForm/>
-                  <EmployeeTable employees={this.state.employees}/>
+                  <EmployeeForm formValues={this.state.form} handleInputChange={this.handleInputChange}
+                                onSubmit={this.handleSubmit} />
+                  <EmployeeTable employees={this.state.employees} />
                 </article>
               </main>
             </div>

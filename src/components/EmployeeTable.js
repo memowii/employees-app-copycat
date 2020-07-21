@@ -27,7 +27,9 @@ export class EmployeeTable extends React.Component {
             <td className="text-center">
               <div className="btn-group" role="group">
                 <button type="button" className="btn btn-success btn-group-lg">Edit</button>
-                <button type="button" className="btn btn-danger btn-group-lg">Delete</button>
+                <button type="button" className="btn btn-danger btn-group-lg"
+                        onClick={() => this.props.onDeleteEmployee(employee.id)}>Delete
+                </button>
               </div>
             </td>
           </tr>

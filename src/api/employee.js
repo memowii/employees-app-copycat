@@ -28,7 +28,7 @@ export class Employee {
 
   async editEmployee(id, updatedEmployee) {
     try {
-      const response = await fetch(new URL(id, this.API_URL).href, {
+      const response = await fetch(`${this.API_URL}/${id}`, {
           method: 'PUT',
           body: JSON.stringify(updatedEmployee),
           headers: {'Content-type': 'application/json; charset=UTF-8'},
@@ -42,7 +42,7 @@ export class Employee {
 
   async deleteEmployee(id) {
     try {
-      const response = await fetch(new URL(id, this.API_URL), {
+      const response = await fetch(`${this.API_URL}/${id}`, {
         method: 'DELETE',
       });
       return response.status === 200;

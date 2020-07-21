@@ -116,6 +116,18 @@ class App extends React.Component {
     this.nameInput.current.focus();
   }
 
+  deleteEmployee = async id => {
+    try {
+      const response = await this.api.deleteEmployee(id);
+      if (response) {
+        const employees = this.state.employees.filter(employe => employe.id !== id);
+        this.setState({employees});
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   render() {
     return (
       <>
@@ -133,7 +145,7 @@ class App extends React.Component {
                                 success={this.state.success} clearStatus={this.clearStatus}
                                 nameInput={this.nameInput} />
 
-                  <EmployeeTable employees={this.state.employees} />
+                  <EmployeeTable employees={this.state.employees} onDeleteEmployee={this.deleteEmployee} />
                 </article>
               </main>
             </div>

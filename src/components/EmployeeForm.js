@@ -1,30 +1,41 @@
 import React from 'react';
 
-export class EmployeeForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      submitting: false,
-      error: false,
-      success: false,
-    };
-  }
+export function EmployeeForm(props) {
 
-  render() {
-    return (
-      <form onSubmit={this.props.onSubmit}>
-        <div className="form-group">
-          <label htmlFor="exampleInputName">Employee name</label>
-          <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="name"
-                 value={this.props.formValues.name} onChange={this.props.handleInputChange} />
+  return (
+    <form onSubmit={props.onSubmit}>
+      <div className="form-group">
+        <label>Employee name</label>
+        <input type="text"
+               className={`form-control ${props.submitting && !props.formValues.name.isValid && 'is-invalid'}`}
+               name="name" value={props.formValues.name.value} onChange={props.handleInputChange}
+               onFocus={props.clearStatus} ref={props.nameInput} onKeyPress={props.clearStatus} />
+        <div className="invalid-feedback">
+          Please provide name.
         </div>
-        <div className="form-group">
-          <label htmlFor="exampleInputEmail1">Employee Email</label>
-          <input type="email" className="form-control" id="exampleInputPassword1" name="email"
-                 value={this.props.formValues.email} onChange={this.props.handleInputChange} />
+      </div>
+      <div className="form-group">
+        <label>Employee Email</label>
+        <input type="email"
+               className={`form-control ${props.submitting && !props.formValues.email.isValid && 'is-invalid'}`}
+               name="email" value={props.formValues.email.value} onChange={props.handleInputChange}
+               onFocus={props.clearStatus} />
+        <div className="invalid-feedback">
+          Please provide email.
         </div>
-        <button type="submit" className="btn btn-success">Add Employee</button>
-      </form>
-    );
-  }
+      </div>
+      {props.error && props.submitting &&
+      <div className="alert alert-danger">
+        Please fill out all required fields!
+      </div>
+      }
+      {props.success &&
+      <div className="alert alert-success">
+        Employee successfully added ✅
+      </div>
+      }
+      <button type="submit" className="btn btn-success">Add Employee</button>
+    </form>
+  );
+
 }

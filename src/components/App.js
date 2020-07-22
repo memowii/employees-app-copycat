@@ -23,41 +23,27 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.isValidName = this.isValid('name')
+    this.isValidEmail = this.isValid('email');
     this.api.getEmployees().then(employees => this.setState({employees}));
   }
 
-  isValidName() {
-    if (this.state.form.name.value !== '') {
-      this.setState(prevState => ({
-        form: {
-          ...prevState.form,
-          name: {
-            ...prevState.form.name,
-            isValid: true,
+  isValid = inputName => {
+    return () => {
+      if (this.state.form[inputName].value !== '') {
+        this.setState(prevState => ({
+          form: {
+            ...prevState.form,
+            [inputName]: {
+              ...prevState.form[inputName],
+              isValid: true,
+            },
           },
-        },
-      }));
-      return true;
+        }));
+        return true;
+      }
+      return false;
     }
-
-    return false;
-  }
-
-  isValidEmail() {
-    if (this.state.form.email.value !== '') {
-      this.setState(prevState => ({
-        form: {
-          ...prevState.form,
-          email: {
-            ...prevState.form.email,
-            isValid: true,
-          },
-        },
-      }));
-      return true;
-    }
-
-    return false;
   }
 
   clearStatus = event => {

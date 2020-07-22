@@ -34,6 +34,7 @@ export function EmployeeTable(props) {
 
   return (
     <div className="table-responsive">
+      {props.employees.length < 1 && <p className="mt-4">No employees found.</p>}
       <p className="table-message mt-4 text-muted small text-center">
         Scroll to the right on the table to see other options.</p>
       <table className="EmployeeTable table">

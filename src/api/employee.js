@@ -27,6 +27,10 @@ export class Employee {
   }
 
   async editEmployee(id, updatedEmployee) {
+    if (id > 10) {
+      return updatedEmployee;
+    }
+
     try {
       const response = await fetch(`${this.API_URL}/${id}`, {
           method: 'PUT',

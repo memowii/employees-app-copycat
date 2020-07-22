@@ -33,54 +33,58 @@ export function EmployeeTable(props) {
   }
 
   return (
-    <table className="EmployeeTable table mt-5">
-      <thead>
-      <tr>
-        <th className="border-top-0">Employee name</th>
-        <th className="border-top-0">Employee email</th>
-      </tr>
-      </thead>
-      <tbody>
-      {props.employees.map(employee => (
-        <tr key={employee.id}>
-          <td>
-            {editing === employee.id ?
-              <input type="text" value={name} onChange={event => setName(event.target.value)} />
-              : <>{employee.name}</>
-            }
-          </td>
-          <td>
-            {editing === employee.id ?
-              <input type="text" value={email} onChange={event => setEmail(event.target.value)} />
-              : <>{employee.email}</>
-            }
-          </td>
-          <td className="text-center">
-            <div className="btn-group">
-              {
-                editing === employee.id ?
-                  <>
-                    <button type="button" className="btn btn-success btn-group-lg"
-                            onClick={() => editEmployee(employee)}>Save
-                    </button>
-                    <button type="button" className="btn btn-danger btn-group-lg"
-                            onClick={() => cancelEdit(employee)}>Cancel
-                    </button>
-                  </>
-                  : <>
-                    <button type="button" className="btn btn-success btn-group-lg"
-                            onClick={() => editMode(employee)}>Edit
-                    </button>
-                    <button type="button" className="btn btn-danger btn-group-lg"
-                            onClick={() => props.onDeleteEmployee(employee.id)}>Delete
-                    </button>
-                  </>
-              }
-            </div>
-          </td>
+    <div className="table-responsive">
+      <p className="table-message mt-4 text-muted small text-center">
+        Scroll to the right on the table to see other options.</p>
+      <table className="EmployeeTable table">
+        <thead>
+        <tr>
+          <th className="border-top-0">Employee name</th>
+          <th className="border-top-0">Employee email</th>
         </tr>
-      ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {props.employees.map(employee => (
+          <tr key={employee.id}>
+            <td>
+              {editing === employee.id ?
+                <input type="text" value={name} onChange={event => setName(event.target.value)} />
+                : <>{employee.name}</>
+              }
+            </td>
+            <td>
+              {editing === employee.id ?
+                <input type="text" value={email} onChange={event => setEmail(event.target.value)} />
+                : <>{employee.email}</>
+              }
+            </td>
+            <td className="text-center">
+              <div className="btn-group">
+                {
+                  editing === employee.id ?
+                    <>
+                      <button type="button" className="btn btn-success btn-group-lg"
+                              onClick={() => editEmployee(employee)}>Save
+                      </button>
+                      <button type="button" className="btn btn-danger btn-group-lg"
+                              onClick={() => cancelEdit(employee)}>Cancel
+                      </button>
+                    </>
+                    : <>
+                      <button type="button" className="btn btn-success btn-group-lg"
+                              onClick={() => editMode(employee)}>Edit
+                      </button>
+                      <button type="button" className="btn btn-danger btn-group-lg"
+                              onClick={() => props.onDeleteEmployee(employee.id)}>Delete
+                      </button>
+                    </>
+                }
+              </div>
+            </td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

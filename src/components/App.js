@@ -80,6 +80,14 @@ class App extends React.Component {
     }));
   };
 
+  cleanEmployee = employee => {
+    return {
+      id: Math.max(...this.state.employees.map(employee => employee.id)) + 1,
+      name: employee.name.value,
+      email: employee.email.value,
+    };
+  };
+
   handleSubmit = async event => {
     event.preventDefault();
     this.setState({submitting: true});
@@ -94,9 +102,9 @@ class App extends React.Component {
     try {
       const response = await this.api.addEmployee(this.state.form);
       if (response) {
-        response.id = Math.max(...this.state.employees.map(o => o.id)) + 1;
+        const employee = this.cleanEmployee(response);
         this.setState({
-          employees: [...this.state.employees, response],
+          employees: [...this.state.employees, employee],
           error: false,
           success: true,
           submitting: false,
@@ -128,6 +136,20 @@ class App extends React.Component {
     }
   };
 
+  editEmployee = async (id, updatedEmployee) => {
+    try {
+      const response = await this.api.editEmployee(id, updatedEmployee);
+      if (response) {
+        const employees = this.state.employees.slice();
+        this.setState({
+          employees: this.state.employees.map(employee => employee.id === id ? response : employee),
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   render() {
     return (
       <>
@@ -145,7 +167,8 @@ class App extends React.Component {
                                 success={this.state.success} clearStatus={this.clearStatus}
                                 nameInput={this.nameInput} />
 
-                  <EmployeeTable employees={this.state.employees} onDeleteEmployee={this.deleteEmployee} />
+                  <EmployeeTable employees={this.state.employees} onDeleteEmployee={this.deleteEmployee}
+                                 editEmployee={this.editEmployee} />
                 </article>
               </main>
             </div>

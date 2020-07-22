@@ -1,41 +1,86 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './styles/EmployeeTable.css';
 
-export class EmployeeTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editing: null,
-    };
+export function EmployeeTable(props) {
+  const [editing, setEditing] = useState(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [cachedEmployee, setCachedEmployee] = useState(null);
+
+  function editMode(employee) {
+    setCachedEmployee(Object.assign({}, employee));
+    setEditing(employee.id);
+    setName(employee.name);
+    setEmail(employee.email);
   }
 
-  render() {
-    return (
-      <table className="EmployeeTable table mt-5">
-        <thead>
-        <tr>
-          <th className="border-top-0">Employee name</th>
-          <th className="border-top-0">Employee email</th>
-        </tr>
-        </thead>
-        <tbody>
-        {this.props.employees.map(employee => (
-          <tr key={employee.id}>
-            <td>{employee.name && employee.name.value ? employee.name.value : employee.name}</td>
-            <td>{employee.email && employee.email.value ? employee.email.value : employee.email}</td>
-            <td className="text-center">
-              <div className="btn-group" role="group">
-                <button type="button" className="btn btn-success btn-group-lg">Edit</button>
-                <button type="button" className="btn btn-danger btn-group-lg"
-                        onClick={() => this.props.onDeleteEmployee(employee.id)}>Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
-    );
+  function cancelEdit(employee) {
+    Object.assign(employee, cachedEmployee);
+    setEditing(null);
   }
+
+  function editEmployee(employee) {
+    const updatedEmployee = {...employee};
+    updatedEmployee.name = name;
+    updatedEmployee.email = email;
+
+    if (employee.name === '' || employee.email === '') return;
+    props.editEmployee(updatedEmployee.id, updatedEmployee);
+    setEditing(null);
+    setName(null);
+    setEmail(null);
+  }
+
+  return (
+    <table className="EmployeeTable table mt-5">
+      <thead>
+      <tr>
+        <th className="border-top-0">Employee name</th>
+        <th className="border-top-0">Employee email</th>
+      </tr>
+      </thead>
+      <tbody>
+      {props.employees.map(employee => (
+        <tr key={employee.id}>
+          <td>
+            {editing === employee.id ?
+              <input type="text" value={name} onChange={event => setName(event.target.value)} />
+              : <>{employee.name}</>
+            }
+          </td>
+          <td>
+            {editing === employee.id ?
+              <input type="text" value={email} onChange={event => setEmail(event.target.value)} />
+              : <>{employee.email}</>
+            }
+          </td>
+          <td className="text-center">
+            <div className="btn-group">
+              {
+                editing === employee.id ?
+                  <>
+                    <button type="button" className="btn btn-success btn-group-lg"
+                            onClick={() => editEmployee(employee)}>Save
+                    </button>
+                    <button type="button" className="btn btn-danger btn-group-lg"
+                            onClick={() => cancelEdit(employee)}>Cancel
+                    </button>
+                  </>
+                  : <>
+                    <button type="button" className="btn btn-success btn-group-lg"
+                            onClick={() => editMode(employee)}>Edit
+                    </button>
+                    <button type="button" className="btn btn-danger btn-group-lg"
+                            onClick={() => props.onDeleteEmployee(employee.id)}>Delete
+                    </button>
+                  </>
+              }
+            </div>
+          </td>
+        </tr>
+      ))}
+      </tbody>
+    </table>
+  );
 }
